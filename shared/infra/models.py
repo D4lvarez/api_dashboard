@@ -86,7 +86,7 @@ class TenasusDetail(SQLModel, table=True):
 
 
 class TenasusLocations(SQLModel, table=True):
-    __tablename__ = ""
+    __tablename__ = "tenasus_report_details_location"
     id: int | None = Field(default=None, primary_key=True)
     url: str
     method: str
