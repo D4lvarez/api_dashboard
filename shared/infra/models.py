@@ -11,16 +11,16 @@ class TenableReport(SQLModel, table=True):
     created_at: datetime
 
     # Relations
-    details: "TenableDetail" = Relationship(back_populates="tenable_report")
+    details: list["TenableDetail"] = Relationship(back_populates="tenable_report")
 
 
 class TenableDetail(SQLModel, table=True):
     __tablename__ = "tenable_details"
     id: int | None = Field(default=None, primary_key=True)
     severity: str
-    cvss: int | str
-    vpr: int | str
-    plugin: int | str
+    cvss: str
+    vpr: str
+    plugin: str
     name: str
     url: str
 
@@ -66,6 +66,7 @@ class TenasusAlerts(SQLModel, table=True):
 
 
 class TenasusDetail(SQLModel, table=True):
+    __tablename__ = "tenasus_reports_details"
     id: int | None = Field(default=None, primary_key=True)
     vulnerability_name: str
     description: str
