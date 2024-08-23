@@ -3,6 +3,29 @@ from datetime import datetime
 from sqlmodel import SQLModel, Field, Relationship
 
 
+class User(SQLModel, table=True):
+    __tablename__ = "users"
+    id: int | None = Field(default=None, primary_key=True)
+    username: str = Field(unique=True)
+    email: str = Field(unique=True)
+    password: str
+    is_deleted: bool = Field(default=False, index=True)
+
+    # Relations
+    tenable_reports: list["TenableReport"] = Relationship(back_populates="created_by")
+    tenasus_reports: list["TenasusReport"] = Relationship(back_populates="created_by")
+
+
+class Client(SQLModel, table=True):
+    __tablename__ = "clients"
+    id: int | None = Field(default=None, primary_key=True)
+    name: str = Field(unique=True, index=True)
+
+    # Relations
+    tenable_reports: list["TenableReport"] = Relationship(back_populates="client")
+    tenasus_reports: list["TenasusReport"] = Relationship(back_populates="created_by")
+
+
 class TenableReport(SQLModel, table=True):
     __tablename__ = "tenable_reports"
     id: int | None = Field(default=None, primary_key=True)
@@ -11,6 +34,11 @@ class TenableReport(SQLModel, table=True):
     created_at: datetime
 
     # Relations
+    client_id: int = Field(foreign_key="clients.id")
+    client: Client = Relationship(back_populates="tenable_reports")
+    created_by_id: int = Field(foreign_key="users.id")
+    created_by: User = Relationship(back_populates="tenable_reports")
+
     details: list["TenableDetail"] = Relationship(back_populates="tenable_report")
 
 
@@ -37,6 +65,11 @@ class TenasusReport(SQLModel, table=True):
     created_at: datetime
 
     # Relations
+    client_id: int = Field(foreign_key="clients.id")
+    client: Client = Relationship(back_populates="tenasus_reports")
+    created_by_id: int = Field(foreign_key="users.id")
+    created_by: User = Relationship(back_populates="tenasus_reports")
+
     summary: list["TenasusSummary"] = Relationship(back_populates="tenasus_report")
     alerts: list["TenasusAlerts"] = Relationship(back_populates="tenasus_report")
     details: list["TenasusDetail"] = Relationship(back_populates="tenasus_report")
