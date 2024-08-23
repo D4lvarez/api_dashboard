@@ -4,7 +4,7 @@ import sys
 formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 
 
-def setup_logger_level(logger_name: str, filename: str | None = None):
+def setup_logger(logger_name: str, filename: str | None = None):
     logger = logging.getLogger(logger_name)
     logger.setLevel(logging.DEBUG)
 
